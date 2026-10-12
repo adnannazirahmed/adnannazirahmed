@@ -24,7 +24,7 @@
 
 ### `adnannazirahmed@github:~$ ./contributions.sh`
 
-<img src="./assets/contributions.svg" width="100%" alt="Adnan Ahmed's GitHub contribution calendar, refreshed daily" />
+<img src="./assets/contributions.svg" width="100%" alt="Adnan Ahmed's GitHub contribution calendar, refreshed every 12 hours" />
 
 <br>
 
