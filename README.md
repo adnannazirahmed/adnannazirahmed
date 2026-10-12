@@ -3,7 +3,7 @@
 <h3><code>adnannazirahmed@github ~ $ ./contributions.sh</code></h3>
 
 <a href="https://github.com/adnannazirahmed">
-  <img src="https://ghchart.rshah.org/7c83ff/adnannazirahmed" width="100%" alt="Adnan's GitHub contributions over the last year" />
+  <img src="https://ghchart.xqsit94.in/dark:default/adnannazirahmed" width="100%" alt="Adnan's GitHub contributions over the last year" />
 </a>
 
 <br>
