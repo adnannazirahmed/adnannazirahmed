@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -11,6 +12,10 @@ from urllib.request import Request, urlopen
 USERNAME = os.environ.get("PROFILE_GITHUB_USER", "adnannazirahmed")
 TOKEN = os.environ.get("GH_TOKEN")
 OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "github-stats.svg"
+CONTRIBUTIONS_OUTPUT = (
+    Path(__file__).resolve().parents[1] / "assets" / "contributions.svg"
+)
+CONTRIBUTIONS_URL = f"https://ghchart.xqsit94.in/dark:default/{USERNAME}"
 
 
 def github_json(url: str):
@@ -71,8 +76,34 @@ def render_stats(repositories: int, stars: int, followers: int, languages: int) 
 '''
 
 
+def refresh_contributions() -> None:
+    request = Request(
+        CONTRIBUTIONS_URL,
+        headers={
+            "Accept": "image/svg+xml",
+            "User-Agent": f"{USERNAME}-profile-stats",
+        },
+    )
+    with urlopen(request, timeout=30) as response:
+        svg = response.read().decode("utf-8")
+
+    width_match = re.search(r'(<svg\b[^>]*\bwidth=")(\d+)(")', svg)
+    if not width_match:
+        raise RuntimeError("Contribution chart SVG has no numeric width")
+
+    original_width = int(width_match.group(2))
+    padded_width = original_width + 32
+    svg = (
+        svg[: width_match.start(2)]
+        + str(padded_width)
+        + svg[width_match.end(2) :]
+    )
+    CONTRIBUTIONS_OUTPUT.write_text(svg, encoding="utf-8")
+
+
 def main() -> None:
     OUTPUT.write_text(render_stats(*collect_stats()), encoding="utf-8")
+    refresh_contributions()
 
 
 if __name__ == "__main__":
