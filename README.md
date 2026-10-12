@@ -10,6 +10,12 @@
 
 <br>
 
+### `adnannazirahmed@github:~$ python ./scripts/update_stats.py`
+
+<img src="./assets/github-stats.svg" width="100%" alt="Automatically updated GitHub statistics for Adnan Ahmed" />
+
+<br>
+
 ### `adnannazirahmed@github:~$ cat ./about.md`
 
 <img src="./assets/about-me.svg" width="100%" alt="About Adnan Ahmed — cloud computing student, cybersecurity enthusiast, and AI tool builder" />
