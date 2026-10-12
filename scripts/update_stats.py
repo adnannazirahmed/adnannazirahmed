@@ -74,7 +74,7 @@ def render_stats(repositories: int, stars: int, followers: int, languages: int) 
   <text x="40" y="43" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="15">LIVE — GITHUB STATS</text>
   <text x="40" y="83" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="30" font-weight="700">Public work at a glance</text>
 {chr(10).join(card_markup)}
-  <text x="40" y="252" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">Automatically checked every 24 hours via GitHub Actions</text>
+  <text x="40" y="252" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">Automatically checked every 12 hours via GitHub Actions</text>
 </svg>
 '''
 
@@ -198,7 +198,7 @@ def render_streak_stats(svg: str) -> str:
 
   <path d="M40 382H1160" stroke="#30363d"/>
   <text x="40" y="416" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="13">public activity through {latest_day.isoformat()}</text>
-  <text x="1160" y="416" text-anchor="end" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="13">refreshed every 24 hours</text>
+  <text x="1160" y="416" text-anchor="end" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="13">refreshed every 12 hours</text>
 </svg>
 '''
 
