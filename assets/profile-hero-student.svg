@@ -25,10 +25,15 @@
     <tspan x="70" dy="34">Building AI tools · securing AWS · designing cloud systems</tspan>
   </text>
 
-  <rect x="70" y="380" width="184" height="48" rx="6" fill="#3fb950"/>
-  <text x="162" y="411" text-anchor="middle" fill="#0d1117" font-family="JetBrains Mono, Consolas, monospace" font-size="16" font-weight="700">VIEW PROJECTS</text>
-  <rect x="270" y="380" width="205" height="48" rx="6" fill="#0d1117" stroke="#30363d"/>
-  <text x="372" y="411" text-anchor="middle" fill="#c9d1e8" font-family="JetBrains Mono, Consolas, monospace" font-size="16">ALL REPOSITORIES ↗</text>
+  <text x="70" y="383" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="14">CURRENT FOCUS</text>
+  <g font-family="JetBrains Mono, Consolas, monospace" font-size="13">
+    <rect x="70" y="398" width="178" height="38" rx="19" fill="#0d1117" stroke="#30363d"/>
+    <text x="159" y="422" text-anchor="middle" fill="#58a6ff">AWS IAM SECURITY</text>
+    <rect x="260" y="398" width="202" height="38" rx="19" fill="#0d1117" stroke="#30363d"/>
+    <text x="361" y="422" text-anchor="middle" fill="#c9d1e8">CLOUD ARCHITECTURE</text>
+    <rect x="474" y="398" width="137" height="38" rx="19" fill="#0d1117" stroke="#30363d"/>
+    <text x="542" y="422" text-anchor="middle" fill="#a371f7">AI TOOLING</text>
+  </g>
 
   <g transform="translate(835 137)">
     <rect width="260" height="260" rx="10" fill="#0d1117" stroke="#30363d" stroke-width="2"/>
