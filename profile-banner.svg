@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-labelledby="title desc">
+  <title id="title">Adnan's GitHub profile</title>
+  <desc id="desc">A midnight blue and violet banner with a terminal window and the words Code, Learn, Build.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#080d1c"/>
+      <stop offset="55%" stop-color="#111a35"/>
+      <stop offset="100%" stop-color="#201238"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#55e6d0"/>
+      <stop offset="50%" stop-color="#7c83ff"/>
+      <stop offset="100%" stop-color="#d68cff"/>
+    </linearGradient>
+    <radialGradient id="orb" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#7965ff" stop-opacity=".3"/>
+      <stop offset="100%" stop-color="#7965ff" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#b7c2ff" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+    <filter id="shadow" x="-20%" y="-30%" width="140%" height="170%">
+      <feDropShadow dx="0" dy="16" stdDeviation="18" flood-color="#02040b" flood-opacity=".45"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="360" rx="28" fill="url(#bg)"/>
+  <rect width="1200" height="360" rx="28" fill="url(#grid)"/>
+  <circle cx="1040" cy="110" r="300" fill="url(#orb)"/>
+  <path d="M0 286 C245 242 345 345 576 286 S955 237 1200 294" fill="none" stroke="url(#glow)" stroke-opacity=".42" stroke-width="2"/>
+  <path d="M0 310 C246 267 354 366 588 308 S970 259 1200 316" fill="none" stroke="#7884ff" stroke-opacity=".22" stroke-width="1"/>
+  <g filter="url(#shadow)">
+    <rect x="77" y="59" width="1046" height="242" rx="20" fill="#0b1020" fill-opacity=".82" stroke="#aab4ff" stroke-opacity=".22"/>
+    <path d="M97 59h1006a20 20 0 0 1 20 20v34H77V79a20 20 0 0 1 20-20z" fill="#ffffff" fill-opacity=".035"/>
+    <circle cx="108" cy="87" r="6" fill="#ff6b82"/>
+    <circle cx="130" cy="87" r="6" fill="#ffd166"/>
+    <circle cx="152" cy="87" r="6" fill="#57dfaa"/>
+    <text x="600" y="92" text-anchor="middle" fill="#a6b0ce" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" letter-spacing="2">ADNANNAZIRAHMED  /  GITHUB</text>
+    <text x="132" y="174" fill="#e9ecff" font-family="Segoe UI, Arial, sans-serif" font-size="54" font-weight="700" letter-spacing="1">Hi, I'm Adnan</text>
+    <text x="135" y="216" fill="#a8b2d4" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18">
+      <tspan fill="#55e6d0">$</tspan><tspan> code </tspan><tspan fill="#7c83ff">·</tspan><tspan> learn </tspan><tspan fill="#d68cff">·</tspan><tspan> build</tspan><tspan fill="#55e6d0">_</tspan>
+    </text>
+    <rect x="133" y="247" width="190" height="3" rx="2" fill="url(#glow)"/>
+    <text x="1067" y="266" text-anchor="end" fill="#697493" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="12" letter-spacing="2">OPEN TO WHAT'S NEXT</text>
+  </g>
+</svg>
