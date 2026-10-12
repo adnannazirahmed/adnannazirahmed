@@ -46,6 +46,9 @@
 
 <h3><code>adnannazirahmed@github ~ $ ./links.sh</code></h3>
 
+<a href="https://www.linkedin.com/in/adnanahm/">
+  <img src="https://img.shields.io/badge/LinkedIn-adnanahm-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="Connect with Adnan Ahmed on LinkedIn" />
+</a>
 <a href="https://github.com/adnannazirahmed/Winnow-1.1">
   <img src="https://img.shields.io/badge/Winnow-1.1-111827?style=for-the-badge&logo=amazonaws&logoColor=white" alt="Winnow 1.1, AWS IAM security tool" />
 </a>
