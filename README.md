@@ -1,12 +1,18 @@
 <div align="center">
 
-<img src="./assets/profile-hero.svg" width="100%" alt="Adnan Ahmed — AI tooling and cloud infrastructure developer" />
+<img src="./assets/profile-hero.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast" />
 
 <br>
 
 [![GitHub](https://img.shields.io/badge/GitHub-adnannazirahmed-161b22?style=for-the-badge&logo=github&logoColor=e6ebf5)](https://github.com/adnannazirahmed)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-adnanahm-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/adnanahm/)
 [![Repositories](https://img.shields.io/badge/Explore-11_repositories-3fb950?style=for-the-badge&logo=git&logoColor=0d1117)](https://github.com/adnannazirahmed?tab=repositories)
+
+<br>
+
+### `adnannazirahmed@github:~$ cat ./about.md`
+
+<img src="./assets/about-me.svg" width="100%" alt="About Adnan Ahmed — cloud computing student, cybersecurity enthusiast, and AI tool builder" />
 
 <br>
 
