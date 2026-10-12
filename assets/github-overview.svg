@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="270" viewBox="0 0 1200 270" role="img" aria-labelledby="title desc">
+  <title id="title">Adnan Ahmed's GitHub statistics</title>
+  <desc id="desc">Automatically updated public repository, star, follower, and language totals.</desc>
+  <rect width="1200" height="270" rx="12" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+  <text x="40" y="43" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="15">LIVE — GITHUB STATS</text>
+  <text x="40" y="83" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="30" font-weight="700">Public work at a glance</text>
+  <g transform="translate(40 112)">
+    <rect width="350" height="112" rx="9" fill="#0d1117" stroke="#30363d"/>
+    <circle cx="24" cy="27" r="5" fill="#58a6ff"/>
+    <text x="42" y="32" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">PUBLIC REPOSITORIES</text>
+    <text x="22" y="82" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="38" font-weight="700">11</text>
+  </g>
+  <g transform="translate(425 112)">
+    <rect width="350" height="112" rx="9" fill="#0d1117" stroke="#30363d"/>
+    <circle cx="24" cy="27" r="5" fill="#3fb950"/>
+    <text x="42" y="32" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">FOLLOWERS</text>
+    <text x="22" y="82" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="38" font-weight="700">3</text>
+  </g>
+  <g transform="translate(810 112)">
+    <rect width="350" height="112" rx="9" fill="#0d1117" stroke="#30363d"/>
+    <circle cx="24" cy="27" r="5" fill="#a371f7"/>
+    <text x="42" y="32" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">LANGUAGES USED</text>
+    <text x="22" y="82" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="38" font-weight="700">5</text>
+  </g>
+  <text x="40" y="252" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">Automatically checked every 12 hours via GitHub Actions</text>
+</svg>
+
