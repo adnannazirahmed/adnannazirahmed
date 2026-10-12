@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
+  <title id="title">About Adnan Ahmed</title>
+  <desc id="desc">Adnan is a cloud computing student, cybersecurity enthusiast, and builder of AI powered tools.</desc>
+  <defs>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" fill="none" stroke="#30363d" stroke-opacity=".15"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="470" rx="12" fill="#0d1117"/>
+  <rect width="1200" height="470" rx="12" fill="url(#grid)"/>
+  <rect x="24" y="24" width="1152" height="422" rx="10" fill="#161b22" stroke="#30363d" stroke-width="2"/>
+  <path d="M24 76H1176" stroke="#30363d" stroke-width="2"/>
+  <circle cx="54" cy="50" r="7" fill="#f4514d"/>
+  <circle cx="78" cy="50" r="7" fill="#f6b73c"/>
+  <circle cx="102" cy="50" r="7" fill="#3fb950"/>
+  <text x="600" y="56" text-anchor="middle" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="16">about.md — profile</text>
+
+  <text x="64" y="118" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="14">01 — ABOUT ME</text>
+  <text x="64" y="165" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="34" font-weight="700">Learning the cloud. Securing what runs on it.</text>
+
+  <text x="64" y="210" fill="#c9d1e8" font-family="Inter, Segoe UI, sans-serif" font-size="19">
+    <tspan x="64" dy="0">I am a cloud computing student and cybersecurity enthusiast focused on building secure, practical systems.</tspan>
+    <tspan x="64" dy="31">My work brings together AWS infrastructure, IAM security, and AI-powered tooling—from mapping privilege</tspan>
+    <tspan x="64" dy="31">escalation paths to deploying multi-tier environments and creating useful assistants for everyday problems.</tspan>
+  </text>
+
+  <g transform="translate(64 314)">
+    <rect width="334" height="94" rx="8" fill="#0d1117" stroke="#30363d"/>
+    <circle cx="25" cy="25" r="5" fill="#58a6ff"/>
+    <text x="42" y="30" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="18" font-weight="700">CLOUD COMPUTING</text>
+    <text x="20" y="59" fill="#8b949e" font-family="Inter, Segoe UI, sans-serif" font-size="14">AWS · Terraform · multi-tier systems</text>
+    <text x="20" y="80" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="12">status: always learning</text>
+  </g>
+
+  <g transform="translate(422 314)">
+    <rect width="334" height="94" rx="8" fill="#0d1117" stroke="#30363d"/>
+    <circle cx="25" cy="25" r="5" fill="#3fb950"/>
+    <text x="42" y="30" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="18" font-weight="700">CYBERSECURITY</text>
+    <text x="20" y="59" fill="#8b949e" font-family="Inter, Segoe UI, sans-serif" font-size="14">IAM analysis · policy clarity · defense</text>
+    <text x="20" y="80" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="12">focus: make risk visible</text>
+  </g>
+
+  <g transform="translate(780 314)">
+    <rect width="334" height="94" rx="8" fill="#0d1117" stroke="#30363d"/>
+    <circle cx="25" cy="25" r="5" fill="#a371f7"/>
+    <text x="42" y="30" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="18" font-weight="700">AI + CIVIC TECH</text>
+    <text x="20" y="59" fill="#8b949e" font-family="Inter, Segoe UI, sans-serif" font-size="14">Useful assistants · practical automation</text>
+    <text x="20" y="80" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="12">goal: solve real problems</text>
+  </g>
+</svg>
+
