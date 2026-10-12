@@ -28,6 +28,12 @@
 
 <br>
 
+### `adnannazirahmed@github:~$ ./streaks.sh --insights`
+
+<img src="./assets/streak-stats.svg" width="100%" alt="Adnan Ahmed's current streak, longest streak, contribution totals, and monthly activity" />
+
+<br>
+
 ### `adnannazirahmed@github:~$ ls ./projects`
 
 <img src="./assets/selected-projects-clean.svg" width="100%" alt="Six selected projects by Adnan Ahmed" />
