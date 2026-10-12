@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
   <title id="title">Adnan Ahmed profile</title>
-  <desc id="desc">Terminal inspired profile card for a developer building AI tools and cloud infrastructure.</desc>
+  <desc id="desc">Terminal inspired profile card for a cloud computing student and cybersecurity enthusiast.</desc>
   <defs>
     <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse">
       <path d="M28 0H0V28" fill="none" stroke="#30363d" stroke-opacity=".18"/>
@@ -21,8 +21,8 @@
   <text x="70" y="206" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="58" font-weight="700">Adnan Ahmed</text>
   <text x="72" y="245" fill="#58a6ff" font-family="JetBrains Mono, Consolas, monospace" font-size="20">@adnannazirahmed</text>
   <text x="70" y="300" fill="#c9d1e8" font-family="Inter, Segoe UI, sans-serif" font-size="21">
-    <tspan x="70" dy="0">I build AI-powered tools and cloud infrastructure.</tspan>
-    <tspan x="70" dy="34">AWS security · multi-tier architecture · civic tech</tspan>
+    <tspan x="70" dy="0">Cloud computing student &amp; cybersecurity enthusiast.</tspan>
+    <tspan x="70" dy="34">Building AI tools · securing AWS · designing cloud systems</tspan>
   </text>
 
   <rect x="70" y="380" width="184" height="48" rx="6" fill="#3fb950"/>
