@@ -109,6 +109,6 @@
 
   <path d="M40 382H1160" stroke="#30363d"/>
   <text x="40" y="416" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="13">public activity through 2026-10-10</text>
-  <text x="1160" y="416" text-anchor="end" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="13">refreshed every 24 hours</text>
+  <text x="1160" y="416" text-anchor="end" fill="#3fb950" font-family="JetBrains Mono, Consolas, monospace" font-size="13">refreshed every 12 hours</text>
 </svg>
 
