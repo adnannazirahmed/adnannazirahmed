@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./assets/profile-hero-clean.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast" />
+<img src="./assets/profile-hero-cloud.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast working with AWS and Azure" />
 
 <br>
 
@@ -18,7 +18,7 @@
 
 ### `adnannazirahmed@github:~$ cat ./about.md`
 
-<img src="./assets/about-me.svg" width="100%" alt="About Adnan Ahmed — cloud computing student, cybersecurity enthusiast, and AI tool builder" />
+<img src="./assets/about-cloud.svg" width="100%" alt="About Adnan Ahmed — cloud computing student working with AWS and Azure, cybersecurity enthusiast, and AI tool builder" />
 
 <br>
 
@@ -54,7 +54,7 @@
 
 ### `adnannazirahmed@github:~$ cat stack.json`
 
-<img src="./assets/stack.svg" width="100%" alt="Adnan Ahmed's technology stack" />
+<img src="./assets/stack-cloud.svg" width="100%" alt="Adnan Ahmed's technology stack including AWS and Azure" />
 
 <br>
 
