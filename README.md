@@ -2,7 +2,9 @@
 
 <h3><code>adnannazirahmed@github ~ $ ./contributions.sh</code></h3>
 
-<img src="https://ghchart.rshah.org/7c83ff/adnannazirahmed" width="100%" alt="Adnan's GitHub contributions over the last year" />
+<a href="https://github.com/adnannazirahmed">
+  <img src="https://ghchart.rshah.org/7c83ff/adnannazirahmed" width="100%" alt="Adnan's GitHub contributions over the last year" />
+</a>
 
 <br>
 <br>
@@ -13,14 +15,14 @@
 <tr>
 <td align="center" valign="top" width="36%">
 
-<img src="https://github.com/adnannazirahmed.png?size=420" width="280" alt="Adnan's GitHub profile avatar" />
+<img src="https://github.com/adnannazirahmed.png?size=420" width="260" alt="Adnan Ahmed's GitHub avatar" />
 
-<h2>Adnan</h2>
-<p><code>adnannazirahmed</code></p>
-<p>Code · Learn · Build</p>
+<h2>Adnan Ahmed</h2>
+<p><code>@adnannazirahmed</code></p>
+<p>I build AI-powered tools and cloud infrastructure, with projects spanning AWS security, multi-tier architecture, and civic tech.</p>
 
-<a href="https://github.com/adnannazirahmed">
-  <img src="https://img.shields.io/badge/Follow_on_GitHub-0d1117?style=for-the-badge&logo=github&logoColor=white" alt="Follow Adnan on GitHub" />
+<a href="https://github.com/adnannazirahmed?tab=repositories">
+  <img src="https://img.shields.io/badge/Explore_my_repositories-0d1117?style=for-the-badge&logo=github&logoColor=white" alt="Explore Adnan's repositories" />
 </a>
 
 </td>
@@ -40,6 +42,21 @@
 </tr>
 </table>
 
+<br>
+
+<h3><code>adnannazirahmed@github ~ $ ./links.sh</code></h3>
+
+<a href="https://github.com/adnannazirahmed/Winnow-1.1">
+  <img src="https://img.shields.io/badge/Winnow-1.1-111827?style=for-the-badge&logo=amazonaws&logoColor=white" alt="Winnow 1.1, AWS IAM security tool" />
+</a>
+<a href="https://github.com/adnannazirahmed/CityFixAI">
+  <img src="https://img.shields.io/badge/CityFixAI-111827?style=for-the-badge&logo=googlemaps&logoColor=white" alt="CityFixAI project" />
+</a>
+<a href="https://github.com/adnannazirahmed/aws-multi-tier">
+  <img src="https://img.shields.io/badge/AWS_Multi--Tier-111827?style=for-the-badge&logo=terraform&logoColor=white" alt="AWS multi-tier infrastructure project" />
+</a>
+
+<br>
 <br>
 
 <sub><code>adnannazirahmed@github ~ $ echo "thanks for stopping by"</code></sub>
