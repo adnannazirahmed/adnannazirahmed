@@ -1,6 +1,8 @@
 <div align="center">
 
-<img src="./assets/profile-hero-student.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast" />
+<a href="https://github.com/adnannazirahmed?tab=repositories">
+  <img src="./assets/profile-hero-student.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast. Open repositories." />
+</a>
 
 <br>
 
@@ -26,7 +28,9 @@
 
 ### `adnannazirahmed@github:~$ ls ./projects`
 
-<img src="./assets/selected-projects.svg" width="100%" alt="Six selected projects by Adnan Ahmed" />
+<a href="https://github.com/adnannazirahmed?tab=repositories">
+  <img src="./assets/selected-projects.svg" width="100%" alt="Six selected projects by Adnan Ahmed. Open all repositories." />
+</a>
 
 <br>
 
