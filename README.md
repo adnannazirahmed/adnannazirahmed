@@ -1,14 +1,12 @@
 <div align="center">
 
-<a href="https://github.com/adnannazirahmed?tab=repositories">
-  <img src="./assets/profile-hero-student.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast. Open repositories." />
-</a>
+<img src="./assets/profile-hero-clean.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast" />
 
 <br>
 
 [![GitHub](https://img.shields.io/badge/GitHub-adnannazirahmed-161b22?style=for-the-badge&logo=github&logoColor=e6ebf5)](https://github.com/adnannazirahmed)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-adnanahm-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/adnanahm/)
-[![Repositories](https://img.shields.io/badge/Explore-11_repositories-3fb950?style=for-the-badge&logo=git&logoColor=0d1117)](https://github.com/adnannazirahmed?tab=repositories)
+[![Repositories](https://img.shields.io/badge/Explore-repositories-3fb950?style=for-the-badge&logo=git&logoColor=0d1117)](https://github.com/adnannazirahmed?tab=repositories)
 
 <br>
 
@@ -28,9 +26,7 @@
 
 ### `adnannazirahmed@github:~$ ls ./projects`
 
-<a href="https://github.com/adnannazirahmed?tab=repositories">
-  <img src="./assets/selected-projects.svg" width="100%" alt="Six selected projects by Adnan Ahmed. Open all repositories." />
-</a>
+<img src="./assets/selected-projects-clean.svg" width="100%" alt="Six selected projects by Adnan Ahmed" />
 
 <br>
 
