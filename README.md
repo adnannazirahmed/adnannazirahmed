@@ -12,7 +12,7 @@
 
 ### `adnannazirahmed@github:~$ python ./scripts/update_stats.py`
 
-<img src="./assets/github-stats.svg" width="100%" alt="Automatically updated GitHub statistics for Adnan Ahmed" />
+<img src="./assets/github-overview.svg" width="100%" alt="Automatically updated public repository, follower, and language statistics for Adnan Ahmed" />
 
 <br>
 
