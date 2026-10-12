@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./assets/profile-hero.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast" />
+<img src="./assets/profile-hero-student.svg" width="100%" alt="Adnan Ahmed — cloud computing student and cybersecurity enthusiast" />
 
 <br>
 
