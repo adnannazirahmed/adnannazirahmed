@@ -277,7 +277,14 @@ def render_streak_stats(days: list[tuple[date, int]]) -> str:
         f"{longest_start.strftime('%b')} {longest_start.day} — "
         f"{longest_end.strftime('%b')} {longest_end.day}"
     )
-    current_note = "active through yesterday" if current_streak else "ready for the next commit"
+    if current_streak and days[-1][0] == date.today() and days[-1][1] > 0:
+        current_note = "active today"
+    elif current_streak:
+        current_note = "active through yesterday"
+    else:
+        current_note = "ready for your next contribution"
+    current_unit = "day" if current_streak == 1 else "days"
+    longest_unit = "day" if longest_streak == 1 else "days"
 
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="455" viewBox="0 0 1200 455" role="img" aria-labelledby="title desc">
   <title id="title">Adnan Ahmed's contribution streaks</title>
@@ -289,14 +296,14 @@ def render_streak_stats(days: list[tuple[date, int]]) -> str:
   <g transform="translate(40 110)">
     <rect width="340" height="125" rx="9" fill="#0d1117" stroke="#30363d"/>
     <text x="20" y="31" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="13">$ CURRENT STREAK</text>
-    <text x="20" y="80" fill="#3fb950" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="42" font-weight="700">{current_streak}<tspan fill="#8b949e" font-size="18"> days</tspan></text>
+    <text x="20" y="80" fill="#3fb950" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="42" font-weight="700">{current_streak}<tspan fill="#8b949e" font-size="18"> {current_unit}</tspan></text>
     <text x="20" y="106" fill="#8b949e" font-family="Inter, Segoe UI, sans-serif" font-size="13">{current_note}</text>
   </g>
 
   <g transform="translate(400 110)">
     <rect width="340" height="125" rx="9" fill="#0d1117" stroke="#30363d"/>
     <text x="20" y="31" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="13">$ LONGEST STREAK</text>
-    <text x="20" y="80" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="42" font-weight="700">{longest_streak}<tspan fill="#8b949e" font-size="18"> days</tspan></text>
+    <text x="20" y="80" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="42" font-weight="700">{longest_streak}<tspan fill="#8b949e" font-size="18"> {longest_unit}</tspan></text>
     <text x="20" y="106" fill="#8b949e" font-family="Inter, Segoe UI, sans-serif" font-size="13">{longest_range}</text>
   </g>
 
