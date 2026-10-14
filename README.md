@@ -22,9 +22,26 @@
 
 <br>
 
-### `adnannazirahmed@github:~$ ./streaks.sh --insights`
+<!-- contribution-motd:start -->
+### `adnannazirahmed@github:~$ motd --cloud-security`
 
-<img src="./assets/streak-stats.svg" width="100%" alt="Adnan Ahmed's current streak, longest streak, contribution totals, and monthly activity" />
+```text
+ADNAN AHMED / CLOUD INFRASTRUCTURE + CYBERSECURITY
+AWS / AZURE / IAM / PRACTICAL DEFENSE
+
+CURRENT STREAK   1 day (active today)
+LONGEST STREAK   5 days (Sep 2-Sep 6)
+CONTRIBUTIONS    161 total / 25 active days
+BEST DAY         56 / AVG 6.4 per active day
+MONTHLY (last 12 months)
+   NOV  DEC  JAN  FEB  MAR  APR
+     0    0    0    0    2   65
+   MAY  JUN  JUL  AUG  SEP  OCT
+     0    0    2    0   33   59
+
+activity through 2026-10-14 / refreshes every 12 hours
+```
+<!-- contribution-motd:end -->
 
 <br>
 
