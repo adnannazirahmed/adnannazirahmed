@@ -1,6 +1,12 @@
 name: Refresh profile statistics
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/update_stats.py"
+      - ".github/workflows/refresh-profile.yml"
   schedule:
     - cron: "17 5,17 * * *"
   workflow_dispatch:
