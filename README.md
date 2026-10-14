@@ -22,12 +22,6 @@
 
 <br>
 
-### `adnannazirahmed@github:~$ ./contributions.sh`
-
-<img src="./assets/contributions.svg" width="100%" alt="Adnan Ahmed's GitHub contribution calendar, refreshed every 12 hours" />
-
-<br>
-
 ### `adnannazirahmed@github:~$ ./streaks.sh --insights`
 
 <img src="./assets/streak-stats.svg" width="100%" alt="Adnan Ahmed's current streak, longest streak, contribution totals, and monthly activity" />
