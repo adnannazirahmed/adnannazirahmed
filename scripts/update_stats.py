@@ -79,54 +79,72 @@ def render_stats(repositories: int, followers: int, languages: int) -> str:
 
 
 class ContributionParser(HTMLParser):
-    """Read daily contribution counts from GitHub's public calendar markup."""
+    """Read daily counts from GitHub's accessible contribution calendar."""
 
     def __init__(self) -> None:
         super().__init__()
         self.days: dict[date, int] = {}
-        self.pending_day: date | None = None
-        self.pending_label: list[str] = []
+        self.day_ids: dict[str, date] = {}
+        self.pending_cell: tuple[date, list[str]] | None = None
+        self.pending_tooltip: tuple[str, list[str]] | None = None
 
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attributes = dict(attrs)
         day_value = attributes.get("data-date")
-        if not day_value:
-            return
+        if day_value:
+            try:
+                day = date.fromisoformat(day_value)
+            except ValueError:
+                day = None
+            if day is not None:
+                day_id = attributes.get("id")
+                if day_id:
+                    self.day_ids[day_id] = day
+                count_value = attributes.get("data-count")
+                label = attributes.get("aria-label") or attributes.get("title") or ""
+                count = self._count_from_label(label)
+                if count_value is not None and count_value.isdigit():
+                    self.days[day] = int(count_value)
+                elif count is not None:
+                    self.days[day] = count
+                else:
+                    self.pending_cell = (day, [])
 
-        try:
-            day = date.fromisoformat(day_value)
-        except ValueError:
-            return
-
-        count_value = attributes.get("data-count")
-        if count_value is None:
-            label = attributes.get("aria-label") or attributes.get("title") or ""
-            match = re.search(r"(\d+) contributions?", label)
-            if match:
-                count_value = match.group(1)
-            elif re.search(r"no contributions", label, re.IGNORECASE):
-                count_value = "0"
-        if count_value is not None and count_value.isdigit():
-            self.days[day] = int(count_value)
-            return
-        self.pending_day = day
-        self.pending_label = []
+        # Current GitHub markup places each accessible tooltip after the grid
+        # and links it to a day cell by id instead of nesting it in the <td>.
+        if tag == "tool-tip" and attributes.get("for"):
+            self.pending_tooltip = (attributes["for"] or "", [])
 
     def handle_data(self, data: str) -> None:
-        if self.pending_day is not None:
-            self.pending_label.append(data)
+        if self.pending_tooltip is not None:
+            self.pending_tooltip[1].append(data)
+        if self.pending_cell is not None:
+            self.pending_cell[1].append(data)
 
     def handle_endtag(self, tag: str) -> None:
-        if tag != "td" or self.pending_day is None:
-            return
-        label = " ".join(self.pending_label)
-        match = re.search(r"(\d+) contributions?", label)
+        if tag == "tool-tip" and self.pending_tooltip is not None:
+            day_id, parts = self.pending_tooltip
+            day = self.day_ids.get(day_id)
+            count = self._count_from_label(" ".join(parts))
+            if day is not None and count is not None:
+                self.days[day] = count
+            self.pending_tooltip = None
+
+        if tag == "td" and self.pending_cell is not None:
+            day, parts = self.pending_cell
+            count = self._count_from_label(" ".join(parts))
+            if count is not None:
+                self.days[day] = count
+            self.pending_cell = None
+
+    @staticmethod
+    def _count_from_label(label: str) -> int | None:
+        match = re.search(r"(\d+) contributions?", label, re.IGNORECASE)
         if match:
-            self.days[self.pending_day] = int(match.group(1))
-        elif re.search(r"no contributions", label, re.IGNORECASE):
-            self.days[self.pending_day] = 0
-        self.pending_day = None
-        self.pending_label = []
+            return int(match.group(1))
+        if re.search(r"no contributions", label, re.IGNORECASE):
+            return 0
+        return None
 
 
 def parse_contributions(
@@ -321,17 +339,30 @@ def render_streak_stats(days: list[tuple[date, int]]) -> str:
 def refresh_contributions() -> None:
     today = date.today()
     start = today - timedelta(days=364)
-    url = f"{CONTRIBUTIONS_URL}?from={start.isoformat()}&to={today.isoformat()}"
-    request = Request(
-        url,
-        headers={
-            "Accept": "text/html",
-            "User-Agent": f"{USERNAME}-profile-stats",
-        },
-    )
-    with urlopen(request, timeout=30) as response:
-        markup = response.read().decode("utf-8")
-    days = parse_contributions(markup, start, today)
+    counts: dict[date, int] = {}
+    for year in range(start.year, today.year + 1):
+        year_start = date(year, 1, 1)
+        year_end = date(year, 12, 31)
+        url = f"{CONTRIBUTIONS_URL}?from={year_start.isoformat()}&to={year_end.isoformat()}"
+        request = Request(
+            url,
+            headers={
+                "Accept": "text/html",
+                "User-Agent": f"{USERNAME}-profile-stats",
+            },
+        )
+        with urlopen(request, timeout=30) as response:
+            markup = response.read().decode("utf-8")
+        counts.update(parse_contributions(markup))
+
+    days = []
+    for offset in range((today - start).days + 1):
+        day = start + timedelta(days=offset)
+        if day not in counts:
+            raise RuntimeError(
+                f"GitHub contribution calendar is missing {day.isoformat()}"
+            )
+        days.append((day, counts[day]))
     svg = render_contributions(days)
     CONTRIBUTIONS_OUTPUT.write_text(svg, encoding="utf-8")
     STREAKS_OUTPUT.write_text(render_streak_stats(days), encoding="utf-8")
