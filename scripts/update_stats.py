@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 import os
 import re
+from html.parser import HTMLParser
 from collections import OrderedDict
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from urllib.request import Request, urlopen
 
@@ -18,7 +19,7 @@ CONTRIBUTIONS_OUTPUT = (
     Path(__file__).resolve().parents[1] / "assets" / "contributions.svg"
 )
 STREAKS_OUTPUT = Path(__file__).resolve().parents[1] / "assets" / "streak-stats.svg"
-CONTRIBUTIONS_URL = f"https://ghchart.xqsit94.in/dark:default/{USERNAME}"
+CONTRIBUTIONS_URL = f"https://github.com/users/{USERNAME}/contributions"
 
 
 def github_json(url: str):
@@ -77,24 +78,140 @@ def render_stats(repositories: int, followers: int, languages: int) -> str:
 '''
 
 
-def contribution_days(svg: str) -> list[tuple[date, int]]:
-    matches = re.findall(
-        r"<title>(\d{4}-\d{2}-\d{2}): (\d+) contributions?</title>", svg
+class ContributionParser(HTMLParser):
+    """Read daily contribution counts from GitHub's public calendar markup."""
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.days: dict[date, int] = {}
+        self.pending_day: date | None = None
+        self.pending_label: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        attributes = dict(attrs)
+        day_value = attributes.get("data-date")
+        if not day_value:
+            return
+
+        try:
+            day = date.fromisoformat(day_value)
+        except ValueError:
+            return
+
+        count_value = attributes.get("data-count")
+        if count_value is None:
+            label = attributes.get("aria-label") or attributes.get("title") or ""
+            match = re.search(r"(\d+) contributions?", label)
+            if match:
+                count_value = match.group(1)
+            elif re.search(r"no contributions", label, re.IGNORECASE):
+                count_value = "0"
+        if count_value is not None and count_value.isdigit():
+            self.days[day] = int(count_value)
+            return
+        self.pending_day = day
+        self.pending_label = []
+
+    def handle_data(self, data: str) -> None:
+        if self.pending_day is not None:
+            self.pending_label.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag != "td" or self.pending_day is None:
+            return
+        label = " ".join(self.pending_label)
+        match = re.search(r"(\d+) contributions?", label)
+        if match:
+            self.days[self.pending_day] = int(match.group(1))
+        elif re.search(r"no contributions", label, re.IGNORECASE):
+            self.days[self.pending_day] = 0
+        self.pending_day = None
+        self.pending_label = []
+
+
+def parse_contributions(
+    markup: str, start: date | None = None, end: date | None = None
+) -> list[tuple[date, int]]:
+    parser = ContributionParser()
+    parser.feed(markup)
+    if not parser.days:
+        raise RuntimeError("GitHub contributions page contains no daily data")
+    if start is not None and end is not None:
+        return [
+            (day, parser.days.get(day, 0))
+            for day in (
+                start + timedelta(days=offset)
+                for offset in range((end - start).days + 1)
+            )
+        ]
+    return sorted(parser.days.items())
+
+
+def render_contributions(days: list[tuple[date, int]]) -> str:
+    if not days:
+        raise RuntimeError("Cannot render an empty contribution calendar")
+
+    start = days[0][0]
+    end = days[-1][0]
+    calendar_start = start - timedelta(days=start.weekday())
+    calendar_end = end + timedelta(days=(6 - end.weekday()))
+    weeks = (calendar_end - calendar_start).days // 7 + 1
+    count_by_day = dict(days)
+    max_count = max((count for _, count in days), default=0)
+    colors = ("#0d1117", "#0e4429", "#006d32", "#26a641", "#39d353")
+
+    cells = []
+    month_labels = []
+    previous_month = None
+    for week in range(weeks):
+        x = 42 + week * 15
+        for weekday in range(7):
+            day = calendar_start + timedelta(days=week * 7 + weekday)
+            if day > end or day < start:
+                continue
+            count = count_by_day.get(day, 0)
+            level = 0 if count == 0 else min(4, max(1, (count * 4 + max_count - 1) // max_count))
+            y = 30 + weekday * 15
+            cells.append(
+                f'<rect x="{x}" y="{y}" width="12" height="12" rx="2" '
+                f'fill="{colors[level]}"><title>{day.isoformat()}: '
+                f'{count} contributions</title></rect>'
+            )
+            if day.day == 1 or previous_month is None:
+                month_labels.append(
+                    f'<text x="{x}" y="18" fill="#cecece" '
+                    f'font-family="Segoe UI, sans-serif" font-size="12">'
+                    f'{day.strftime("%b")}</text>'
+                )
+            previous_month = day.month
+
+    weekday_labels = "".join(
+        f'<text x="0" y="{39 + row * 30}" fill="#cecece" '
+        'font-family="Segoe UI, sans-serif" font-size="12">'
+        f'{label}</text>'
+        for row, label in ((0, "Mon"), (2, "Wed"), (4, "Fri"))
     )
-    if not matches:
-        raise RuntimeError("Contribution chart SVG contains no daily data")
-    return [(datetime.strptime(day, "%Y-%m-%d").date(), int(count)) for day, count in matches]
+    width = 54 + weeks * 15
+    return (
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="145" '
+        f'viewBox="0 0 {width} 145" role="img" aria-label="GitHub contributions">'
+        f'<g>{weekday_labels}{"".join(month_labels)}{"".join(cells)}</g></svg>'
+    )
 
 
-def render_streak_stats(svg: str) -> str:
-    days = contribution_days(svg)
+def render_streak_stats(days: list[tuple[date, int]]) -> str:
+    if not days:
+        raise RuntimeError("Cannot render streak statistics without contribution days")
     total = sum(count for _, count in days)
     active_days = sum(count > 0 for _, count in days)
     best_day = max(count for _, count in days)
     average = total / active_days if active_days else 0
 
     current_streak = 0
-    for _, count in reversed(days):
+    current_days = days
+    if days[-1][0] == date.today() and days[-1][1] == 0:
+        current_days = days[:-1]
+    for _, count in reversed(current_days):
         if count == 0:
             break
         current_streak += 1
@@ -142,7 +259,7 @@ def render_streak_stats(svg: str) -> str:
         f"{longest_start.strftime('%b')} {longest_start.day} — "
         f"{longest_end.strftime('%b')} {longest_end.day}"
     )
-    current_note = "active through latest day" if current_streak else "ready for the next commit"
+    current_note = "active through yesterday" if current_streak else "ready for the next commit"
 
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="455" viewBox="0 0 1200 455" role="img" aria-labelledby="title desc">
   <title id="title">Adnan Ahmed's contribution streaks</title>
@@ -202,29 +319,22 @@ def render_streak_stats(svg: str) -> str:
 
 
 def refresh_contributions() -> None:
+    today = date.today()
+    start = today - timedelta(days=364)
+    url = f"{CONTRIBUTIONS_URL}?from={start.isoformat()}&to={today.isoformat()}"
     request = Request(
-        CONTRIBUTIONS_URL,
+        url,
         headers={
-            "Accept": "image/svg+xml",
+            "Accept": "text/html",
             "User-Agent": f"{USERNAME}-profile-stats",
         },
     )
     with urlopen(request, timeout=30) as response:
-        svg = response.read().decode("utf-8")
-
-    width_match = re.search(r'(<svg\b[^>]*\bwidth=")(\d+)(")', svg)
-    if not width_match:
-        raise RuntimeError("Contribution chart SVG has no numeric width")
-
-    original_width = int(width_match.group(2))
-    padded_width = original_width + 32
-    svg = (
-        svg[: width_match.start(2)]
-        + str(padded_width)
-        + svg[width_match.end(2) :]
-    )
+        markup = response.read().decode("utf-8")
+    days = parse_contributions(markup, start, today)
+    svg = render_contributions(days)
     CONTRIBUTIONS_OUTPUT.write_text(svg, encoding="utf-8")
-    STREAKS_OUTPUT.write_text(render_streak_stats(svg), encoding="utf-8")
+    STREAKS_OUTPUT.write_text(render_streak_stats(days), encoding="utf-8")
 
 
 def main() -> None:
