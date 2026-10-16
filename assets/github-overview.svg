@@ -8,7 +8,7 @@
     <rect width="350" height="112" rx="9" fill="#0d1117" stroke="#30363d"/>
     <circle cx="24" cy="27" r="5" fill="#58a6ff"/>
     <text x="42" y="32" fill="#8b949e" font-family="JetBrains Mono, Consolas, monospace" font-size="12">PUBLIC REPOSITORIES</text>
-    <text x="22" y="82" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="38" font-weight="700">10</text>
+    <text x="22" y="82" fill="#e6ebf5" font-family="Space Grotesk, Segoe UI, sans-serif" font-size="38" font-weight="700">11</text>
   </g>
   <g transform="translate(425 112)">
     <rect width="350" height="112" rx="9" fill="#0d1117" stroke="#30363d"/>
