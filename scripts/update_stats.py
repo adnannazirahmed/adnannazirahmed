@@ -3,23 +3,43 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import re
 from collections import OrderedDict
+from dataclasses import dataclass
 from datetime import date, datetime, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.request import Request, urlopen
+
+from PIL import Image, ImageDraw, ImageFont
 
 
 USERNAME = os.environ.get("PROFILE_GITHUB_USER", "adnannazirahmed")
 TOKEN = os.environ.get("GH_TOKEN")
 ROOT = Path(__file__).resolve().parents[1]
 OVERVIEW_OUTPUT = ROOT / "assets" / "github-overview.svg"
+MOTD_IMAGE_PATH = ROOT / "assets" / "cloud-security-motd.gif"
 README_PATH = ROOT / "README.md"
 MOTD_START = "<!-- contribution-motd:start -->"
 MOTD_END = "<!-- contribution-motd:end -->"
 CONTRIBUTIONS_URL = f"https://github.com/users/{USERNAME}/contributions"
+
+
+@dataclass(frozen=True)
+class ContributionSummary:
+    total: int
+    active_days: int
+    best_day: int
+    average: float
+    current_streak: int
+    current_note: str
+    longest_streak: int
+    longest_start: date | None
+    longest_end: date | None
+    months: tuple[tuple[date, int], ...]
+    latest_day: date
 
 
 def github_json(url: str):
@@ -162,8 +182,7 @@ def parse_contributions(
     return sorted(parser.days.items())
 
 
-def render_motd(days: list[tuple[date, int]]) -> str:
-    """Render a compact, text-only cloud and cybersecurity profile welcome."""
+def summarize_contributions(days: list[tuple[date, int]]) -> ContributionSummary:
     if not days:
         raise RuntimeError("Cannot render the contribution MOTD without daily data")
 
@@ -183,9 +202,9 @@ def render_motd(days: list[tuple[date, int]]) -> str:
 
     longest_streak = 0
     running_streak = 0
-    running_start = days[0][0]
-    longest_start = days[0][0]
-    longest_end = days[0][0]
+    running_start: date | None = None
+    longest_start: date | None = None
+    longest_end: date | None = None
     for day, count in days:
         if count > 0:
             if running_streak == 0:
@@ -197,19 +216,16 @@ def render_motd(days: list[tuple[date, int]]) -> str:
                 longest_end = day
         else:
             running_streak = 0
+            running_start = None
 
     monthly: OrderedDict[tuple[int, int], int] = OrderedDict()
     for day, count in days:
         key = (day.year, day.month)
         monthly[key] = monthly.get(key, 0) + count
-    recent_months = list(monthly.items())[-12:]
-
-    month_rows: list[str] = []
-    for offset in range(0, len(recent_months), 6):
-        group = recent_months[offset : offset + 6]
-        labels = " ".join(f"{datetime(year, month, 1):%b}".upper().rjust(4) for (year, month), _ in group)
-        values = " ".join(f"{value:>4}" for _, value in group)
-        month_rows.extend((f"  {labels}", f"  {values}"))
+    months = tuple(
+        (date(year, month, 1), count)
+        for (year, month), count in list(monthly.items())[-12:]
+    )
 
     if current_streak and days[-1][0] == date.today() and days[-1][1] > 0:
         current_note = "active today"
@@ -217,36 +233,171 @@ def render_motd(days: list[tuple[date, int]]) -> str:
         current_note = "active through yesterday"
     else:
         current_note = "ready for the next contribution"
-    current_unit = "day" if current_streak == 1 else "days"
-    longest_unit = "day" if longest_streak == 1 else "days"
+
+    return ContributionSummary(
+        total=total,
+        active_days=active_days,
+        best_day=best_day,
+        average=average,
+        current_streak=current_streak,
+        current_note=current_note,
+        longest_streak=longest_streak,
+        longest_start=longest_start,
+        longest_end=longest_end,
+        months=months,
+        latest_day=days[-1][0],
+    )
+
+
+def render_motd(summary: ContributionSummary) -> str:
+    """Render accessible profile Markdown around the animated terminal card."""
+    current_unit = "day" if summary.current_streak == 1 else "days"
+    longest_unit = "day" if summary.longest_streak == 1 else "days"
     longest_range = (
-        f"{longest_start.strftime('%b')} {longest_start.day}"
-        f"-{longest_end.strftime('%b')} {longest_end.day}"
-        if longest_streak
+        f"{summary.longest_start:%b} {summary.longest_start.day}-"
+        f"{summary.longest_end:%b} {summary.longest_end.day}"
+        if summary.longest_start and summary.longest_end
         else "no active days yet"
     )
-    latest_day = days[-1][0]
-
+    alt = (
+        "Animated cloud infrastructure and cybersecurity stats: "
+        f"current streak {summary.current_streak} {current_unit}, "
+        f"longest streak {summary.longest_streak} {longest_unit} ({longest_range}), "
+        f"{summary.total} contributions over {summary.active_days} active days, "
+        f"best day {summary.best_day}, average {summary.average:.1f} per active day, "
+        f"through {summary.latest_day.isoformat()}."
+    )
     lines = [
         MOTD_START,
         f"### `{USERNAME}@github:~$ motd --cloud-security`",
         "",
-        "```text",
-        "ADNAN AHMED / CLOUD INFRASTRUCTURE + CYBERSECURITY",
-        "AWS / AZURE / IAM / PRACTICAL DEFENSE",
+        f'<img src="./assets/cloud-security-motd.gif" width="100%" alt="{alt}" />',
         "",
-        f"CURRENT STREAK   {current_streak} {current_unit} ({current_note})",
-        f"LONGEST STREAK   {longest_streak} {longest_unit} ({longest_range})",
-        f"CONTRIBUTIONS    {total} total / {active_days} active days",
-        f"BEST DAY         {best_day} / AVG {average:.1f} per active day",
-        "MONTHLY (last 12 months)",
-        *month_rows,
-        "",
-        f"activity through {latest_day.isoformat()} / refreshes every 12 hours",
-        "```",
+        "<sub>AWS · Azure · IAM · practical defense · refreshed every 12 hours</sub>",
         MOTD_END,
     ]
     return "\n".join(lines)
+
+
+def _load_mono_font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
+    font_paths = (
+        ("/usr/share/fonts/truetype/dejavu/DejaVuSansMono-Bold.ttf", "C:/Windows/Fonts/consolab.ttf")
+        if bold
+        else ("/usr/share/fonts/truetype/dejavu/DejaVuSansMono.ttf", "C:/Windows/Fonts/consola.ttf")
+    )
+    for font_path in font_paths:
+        try:
+            return ImageFont.truetype(font_path, size=size)
+        except OSError:
+            continue
+    return ImageFont.load_default(size=size)
+
+
+def render_motd_gif(summary: ContributionSummary, output_path: Path) -> None:
+    """Draw a responsive terminal card with a subtle cursor and status pulse."""
+    width, height = 960, 500
+    frames: list[Image.Image] = []
+    font_tiny = _load_mono_font(12)
+    font_small = _load_mono_font(14)
+    font_body = _load_mono_font(16)
+    font_metric = _load_mono_font(27, bold=True)
+    font_title = _load_mono_font(22, bold=True)
+
+    background = (11, 16, 23)
+    panel = (17, 25, 35)
+    inner = (12, 18, 26)
+    border = (42, 56, 70)
+    white = (232, 240, 248)
+    muted = (142, 160, 179)
+    green = (128, 228, 154)
+    green_dim = (46, 111, 69)
+    blue = (131, 184, 255)
+    months_max = max((value for _, value in summary.months), default=1) or 1
+    current_month = (summary.latest_day.year, summary.latest_day.month)
+    longest_range = (
+        f"{summary.longest_start:%b} {summary.longest_start.day}–"
+        f"{summary.longest_end:%b} {summary.longest_end.day}"
+        if summary.longest_start and summary.longest_end
+        else "no active days yet"
+    )
+    command = f"{USERNAME}@github:~$ motd --cloud-security"
+
+    for frame_index in range(12):
+        image = Image.new("RGB", (width, height), background)
+        draw = ImageDraw.Draw(image)
+        draw.rounded_rectangle((16, 14, 944, 486), radius=16, fill=panel, outline=border, width=2)
+
+        for x, color in ((40, (255, 108, 99)), (58, (255, 196, 87)), (76, (101, 214, 127))):
+            draw.ellipse((x, 29, x + 9, 38), fill=color)
+        draw.text((100, 24), command, font=font_body, fill=white)
+        command_width = draw.textlength(command, font=font_body)
+        if frame_index < 6:
+            draw.rounded_rectangle((104 + command_width, 27, 109 + command_width, 44), radius=1, fill=green)
+
+        pulse = (1 + math.sin((frame_index / 12) * math.tau)) / 2
+        live_color = (int(55 + pulse * 73), int(131 + pulse * 97), int(82 + pulse * 72))
+        draw.ellipse((803, 28, 812, 37), fill=live_color)
+        draw.text((820, 25), "LIVE · 12H", font=font_tiny, fill=green)
+        draw.line((34, 57, 926, 57), fill=border, width=1)
+
+        draw.text((40, 72), "CLOUD INFRASTRUCTURE / CYBERSECURITY", font=font_title, fill=white)
+        draw.text((40, 104), "AWS / AZURE / IAM / PRACTICAL DEFENSE", font=font_small, fill=blue)
+
+        hero_cards = (
+            (40, "CURRENT STREAK", f"{summary.current_streak} {('day' if summary.current_streak == 1 else 'days')}", summary.current_note),
+            (490, "LONGEST STREAK", f"{summary.longest_streak} {('day' if summary.longest_streak == 1 else 'days')}", longest_range),
+        )
+        for x, label, value, note in hero_cards:
+            draw.rounded_rectangle((x, 137, x + 430, 220), radius=10, fill=inner, outline=border, width=1)
+            draw.text((x + 17, 149), label, font=font_tiny, fill=muted)
+            draw.text((x + 17, 168), value, font=font_metric, fill=green if label == "CURRENT STREAK" else white)
+            draw.text((x + 210, 180), note, font=font_tiny, fill=muted)
+
+        metric_cards = (
+            ("CONTRIBUTIONS", str(summary.total)),
+            ("ACTIVE DAYS", str(summary.active_days)),
+            ("BEST DAY", str(summary.best_day)),
+            ("AVG / ACTIVE DAY", f"{summary.average:.1f}"),
+        )
+        for index, (label, value) in enumerate(metric_cards):
+            x = 40 + index * 225
+            draw.rounded_rectangle((x, 232, x + 210, 300), radius=9, fill=inner, outline=border, width=1)
+            draw.text((x + 13, 242), label, font=font_tiny, fill=muted)
+            draw.text((x + 13, 260), value, font=font_metric, fill=white)
+
+        draw.rounded_rectangle((40, 312, 920, 442), radius=10, fill=inner, outline=border, width=1)
+        draw.text((57, 322), "MONTHLY CONTRIBUTIONS · LAST 12 MONTHS", font=font_tiny, fill=muted)
+        baseline = 414
+        bar_width = 32
+        for index, (month, value) in enumerate(summary.months):
+            x = 76 + index * 70
+            bar_height = round(48 * value / months_max)
+            bar_color = green if (month.year, month.month) == current_month else green_dim
+            if value:
+                draw.rounded_rectangle(
+                    (x, baseline - bar_height, x + bar_width, baseline),
+                    radius=5,
+                    fill=bar_color,
+                )
+                draw.text((x + 4, baseline - bar_height - 17), str(value), font=font_tiny, fill=muted)
+            draw.text((x - 1, 420), month.strftime("%b").upper(), font=font_tiny, fill=green if (month.year, month.month) == current_month else muted)
+
+        draw.text((40, 455), f"activity through {summary.latest_day.isoformat()}", font=font_tiny, fill=muted)
+        draw.text((760, 455), "AWS · AZURE · IAM", font=font_tiny, fill=green)
+        frames.append(image)
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    palette_frames = [frame.quantize(colors=128, method=Image.Quantize.MEDIANCUT) for frame in frames]
+    palette_frames[0].save(
+        output_path,
+        format="GIF",
+        save_all=True,
+        append_images=palette_frames[1:],
+        duration=360,
+        loop=0,
+        optimize=True,
+        disposal=2,
+    )
 
 
 def replace_motd_section(readme: str, section: str) -> str:
@@ -284,8 +435,11 @@ def refresh_contributions() -> None:
             raise RuntimeError(f"GitHub contribution calendar is missing {day.isoformat()}")
         days.append((day, counts[day]))
 
+    summary = summarize_contributions(days)
+    render_motd_gif(summary, MOTD_IMAGE_PATH)
+
     existing_readme = README_PATH.read_text(encoding="utf-8")
-    updated_readme = replace_motd_section(existing_readme, render_motd(days))
+    updated_readme = replace_motd_section(existing_readme, render_motd(summary))
     if updated_readme != existing_readme:
         README_PATH.write_text(updated_readme, encoding="utf-8")
 
