@@ -3,6 +3,8 @@ import unittest
 from datetime import date, timedelta
 from pathlib import Path
 
+from PIL import Image, ImageChops
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 import update_stats
 
@@ -53,22 +55,45 @@ class ContributionFeedTests(unittest.TestCase):
             ],
         )
 
-    def test_motd_reports_metrics_and_recent_months_without_svg(self):
+    def test_motd_alt_text_carries_live_metrics_and_profile_topics(self):
         today = date.today()
         days = [
             (today - timedelta(days=2), 1),
             (today - timedelta(days=1), 2),
             (today, 0),
         ]
-        motd = update_stats.render_motd(days)
+        summary = update_stats.summarize_contributions(days)
+        motd = update_stats.render_motd(summary)
 
-        self.assertIn("CLOUD INFRASTRUCTURE + CYBERSECURITY", motd)
-        self.assertIn("CURRENT STREAK   2 days (active through yesterday)", motd)
-        self.assertIn("LONGEST STREAK   2 days", motd)
-        self.assertIn("CONTRIBUTIONS    3 total / 2 active days", motd)
-        self.assertIn("MONTHLY (last 12 months)", motd)
-        self.assertIn(f"activity through {today.isoformat()}", motd)
+        self.assertIn("cloud infrastructure", motd)
+        self.assertIn("cybersecurity", motd)
+        self.assertIn("current streak 2 days", motd)
+        self.assertIn("longest streak 2 days", motd)
+        self.assertIn("3 contributions over 2 active days", motd)
+        self.assertIn(f"through {today.isoformat()}", motd)
+        self.assertIn("cloud-security-motd.gif", motd)
         self.assertNotIn("<svg", motd)
+
+    def test_animated_motd_gif_has_expected_frames_and_visible_animation(self):
+        today = date.today()
+        days = [(today - timedelta(days=1), 2), (today, 1)]
+        summary = update_stats.summarize_contributions(days)
+        output = Path(update_stats.ROOT) / "tests" / ".motd-test.gif"
+        try:
+            update_stats.render_motd_gif(summary, output)
+
+            with Image.open(output) as gif:
+                self.assertEqual(gif.format, "GIF")
+                self.assertEqual(gif.n_frames, 12)
+                self.assertEqual(gif.size, (960, 500))
+                gif.seek(0)
+                first_frame = gif.convert("RGB")
+                gif.seek(6)
+                later_frame = gif.convert("RGB")
+
+            self.assertIsNotNone(ImageChops.difference(first_frame, later_frame).getbbox())
+        finally:
+            output.unlink(missing_ok=True)
 
     def test_readme_motd_replacement_preserves_surrounding_sections(self):
         readme = (
@@ -89,10 +114,11 @@ class ContributionFeedTests(unittest.TestCase):
 
     def test_current_day_activity_is_reported_as_live_and_singular(self):
         today = date.today()
-        motd = update_stats.render_motd([(today, 1)])
+        summary = update_stats.summarize_contributions([(today, 1)])
+        motd = update_stats.render_motd(summary)
 
-        self.assertIn("CURRENT STREAK   1 day (active today)", motd)
-        self.assertIn("LONGEST STREAK   1 day", motd)
+        self.assertIn("current streak 1 day", motd)
+        self.assertIn("longest streak 1 day", motd)
 
 
 if __name__ == "__main__":
