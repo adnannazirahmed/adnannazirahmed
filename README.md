@@ -25,7 +25,7 @@
 <!-- contribution-motd:start -->
 ### `adnannazirahmed@github:~$ motd --cloud-security`
 
-<img src="./assets/cloud-security-motd.gif" width="100%" alt="Animated cloud infrastructure and cybersecurity stats: current streak 1 day, longest streak 9 days (Oct 11-Oct 19), 289 contributions over 49 active days, best day 60, average 5.9 per active day, through 2026-11-05." />
+<img src="./assets/cloud-security-motd.gif" width="100%" alt="Animated cloud infrastructure and cybersecurity stats: current streak 0 days, longest streak 9 days (Oct 11-Oct 19), 289 contributions over 49 active days, best day 60, average 5.9 per active day, through 2026-11-06." />
 
 <sub>AWS · Azure · IAM · practical defense · refreshed every 12 hours</sub>
 <!-- contribution-motd:end -->
